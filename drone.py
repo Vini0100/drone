@@ -3,23 +3,27 @@ import time
 
 class SimpleDroneDelivery:
     """
-    Simulação simples de entregas com o drone Tello.
-    Cenário: apenas 3 pontos — Base, A (esquerda diagonal) e D (direita diagonal)
+    Simulação de voo com 3 pontos:
+    Base → A (esquerda diagonal) e Base → D (direita diagonal).
+    - Sobe 45 cm após decolar.
+    - Gira 360° ao chegar em cada destino (A e D).
     """
 
     def __init__(self):
         self.tello = Tello()
 
     def connect_drone(self):
-        """Conecta ao drone Tello e verifica a bateria."""
+        """Conecta ao drone Tello e mostra o nível da bateria."""
         print("[DRONE] Conectando ao Tello...")
         self.tello.connect()
         print(f"[DRONE] Conectado! Bateria: {self.tello.get_battery()}%")
 
     def takeoff(self):
-        """Decola o drone."""
+        """Decola e sobe 45 cm."""
         print("[DRONE] Decolando...")
         self.tello.takeoff()
+        print("[DRONE] Subindo 45 cm...")
+        self.tello.move_up(45)
         time.sleep(2)
 
     def land(self):
@@ -28,60 +32,77 @@ class SimpleDroneDelivery:
         self.tello.land()
         time.sleep(2)
 
+    # -----------------------------
+    # MOVIMENTOS PARA A E D
+    # -----------------------------
+
     def go_to_A(self):
         """
-        Voa da Base até o ponto A.
-        A está na diagonal esquerda (90cm para esquerda e 90cm à frente).
+        Vai da Base até o ponto A:
+        - Move 90 cm à esquerda
+        - Move 90 cm à frente
+        - Gira 360° (simula entrega)
         """
-        print("[ROTA] Indo para A (esquerda diagonal)")
+        print("[ROTA] Indo para A (diagonal esquerda)")
         self.tello.move_left(90)
         self.tello.move_forward(90)
         print("[LOCAL] Chegou em A.")
-        self.tello.rotate_clockwise(360)  # Simula entrega
+        self.tello.rotate_clockwise(360)
         time.sleep(1)
 
     def go_to_D(self):
         """
-        Voa da Base até o ponto D.
-        D está na diagonal direita (90cm para direita e 90cm à frente).
+        Vai da Base até o ponto D:
+        - Move 90 cm à direita
+        - Move 90 cm à frente
+        - Gira 360° (simula entrega)
         """
-        print("[ROTA] Indo para D (direita diagonal)")
+        print("[ROTA] Indo para D (diagonal direita)")
         self.tello.move_right(90)
         self.tello.move_forward(90)
         print("[LOCAL] Chegou em D.")
-        self.tello.rotate_clockwise(360)  # Simula entrega
+        self.tello.rotate_clockwise(360)
         time.sleep(1)
 
-    def return_to_base_from_A(self):
-        """Volta da posição A até a Base."""
-        print("[RETORNO] Voltando da A para Base...")
+    # -----------------------------
+    # RETORNOS À BASE
+    # -----------------------------
+
+    def return_from_A(self):
+        """Retorna da A até a Base (movimentos inversos)."""
+        print("[RETORNO] Voltando de A para Base...")
         self.tello.move_back(90)
         self.tello.move_right(90)
         print("[LOCAL] Retornou à Base.")
 
-    def return_to_base_from_D(self):
-        """Volta da posição D até a Base."""
-        print("[RETORNO] Voltando da D para Base...")
+    def return_from_D(self):
+        """Retorna da D até a Base (movimentos inversos)."""
+        print("[RETORNO] Voltando de D para Base...")
         self.tello.move_back(90)
         self.tello.move_left(90)
         print("[LOCAL] Retornou à Base.")
 
+    # -----------------------------
+    # EXECUÇÃO PRINCIPAL
+    # -----------------------------
+
     def run(self):
-        """Executa o voo completo: Base → A → Base → D → Base."""
+        """Executa o ciclo completo: Base → A → Base → D → Base."""
         try:
             self.connect_drone()
             self.takeoff()
 
-            # Entrega na A
+            # Entrega A
             self.go_to_A()
-            self.return_to_base_from_A()
+            self.return_from_A()
 
-            # Entrega na D
+            # Entrega D
             self.go_to_D()
-            self.return_to_base_from_D()
+            self.return_from_D()
 
+            # Pouso final
             self.land()
-            print("[MISSÃO] Todas as entregas concluídas!")
+            print("[MISSÃO] Entregas concluídas com sucesso!")
 
         except Exception as e:
             print(f"[ERRO] {e}")
@@ -89,7 +110,7 @@ class SimpleDroneDelivery:
             self.tello.land()
 
 # =====================================================
-# PONTO DE ENTRADA PRINCIPAL
+# EXECUÇÃO PRINCIPAL
 # =====================================================
 if __name__ == "__main__":
     mission = SimpleDroneDelivery()
