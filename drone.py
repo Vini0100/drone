@@ -4,16 +4,16 @@ import time
 class DroneEntregaMapaFinal:
     """
     Grafo e layout conforme definido:
-        C (0, 220)  ↔  F (155, 220)
-        B (0, 110)  ↔  E (155, 110)
+        C (0, 280)  ↔  F (155, 280)
+        B (0, 140)  ↔  E (155, 140)
         A (0,   0)  ↔  D (155,   0)
                     ↑
                   Base
 
     - 155 cm entre colunas (E ↔ D)
-    - 110 cm entre linhas (frente/trás)
-    - Da Base até A/D: 100 cm lateral + 110 cm frente
-    - De F para a Base: mover para trás 220 cm e para a esquerda 100 cm
+    - 140 cm entre linhas (frente/trás)
+    - Da Base até A/D: 130 cm lateral + 140 cm frente
+    - De F para a Base: mover para trás 270 cm e para a esquerda 130 cm
     - Deixe comentados os 360°
     """
 
@@ -42,27 +42,27 @@ class DroneEntregaMapaFinal:
     # ===================================================
 
     def base_para_a(self):
-        """Base → A (100 cm à esquerda + 110 cm à frente)"""
+        """Base → A (130 cm à esquerda + 140 cm à frente)"""
         print("[ROTA] Base → A (diagonal esquerda)")
-        self.tello.move_left(100)
-        self.tello.move_forward(110)
+        self.tello.move_left(130)   # ajustar para 130 cm conforme layout real
+        self.tello.move_forward(140)  # ajustar para 140 cm conforme layout real
         # self.tello.rotate_clockwise(360)
         print("[LOCAL] Chegou em A.")
         time.sleep(1)
 
     def base_para_d(self):
-        """Base → D (100 cm à direita + 110 cm à frente)"""
+        """Base → D (130 cm à direita + 140 cm à frente)"""
         print("[ROTA] Base → D (diagonal direita)")
-        self.tello.move_right(100)
-        self.tello.move_forward(110)
+        self.tello.move_right(130)  # ajustar para 130 cm conforme layout real
+        self.tello.move_forward(140)  # ajustar para 140 cm conforme layout real
         # self.tello.rotate_clockwise(360)
         print("[LOCAL] Chegou em D.")
         time.sleep(1)
 
     def a_para_b(self):
-        """A → B (110 cm à frente, mesma coluna esquerda)"""
+        """A → B (140 cm à frente, mesma coluna esquerda)"""
         print("[ROTA] A → B")
-        self.tello.move_forward(110)
+        self.tello.move_forward(140)
         # self.tello.rotate_clockwise(360)
         print("[LOCAL] Chegou em B.")
         time.sleep(1)
@@ -76,19 +76,19 @@ class DroneEntregaMapaFinal:
         time.sleep(1)
 
     def e_para_f(self):
-        """E → F (110 cm à frente, mesma coluna direita)"""
+        """E → F (140 cm à frente, mesma coluna direita)"""
         print("[ROTA] E → F")
-        self.tello.move_forward(110)
+        self.tello.move_forward(140)
         # self.tello.rotate_clockwise(360)
         print("[LOCAL] Chegou em F.")
         time.sleep(1)
 
     def f_para_base(self):
-        """F → Base (move para trás 220 cm e para a esquerda 100 cm)"""
+        """F → Base (move para trás 270 cm e para a esquerda 130 cm)"""
         print("[RETORNO] F → Base")
-        self.tello.move_back(220)
-        self.tello.move_left(100)
-        self.tello.move_down(45)  # volta à altura base
+        self.tello.move_back(300)  # ajustar para 270 cm conforme layout real
+        self.tello.move_left(130)  # ajustar para 130 cm conforme layout real
+        self.tello.move_down(45)   # volta à altura base
         # self.tello.rotate_clockwise(360)
         print("[LOCAL] Retornou à Base.")
         time.sleep(1)
